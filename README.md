@@ -71,7 +71,7 @@ to apply. If the texture filename is omitted, it applies a default checkerboard 
 
 The viewer doesn't provide much user interaction, but you can right click the window
 to cycle the available render modes (textured, wireframe, color-only, etc) and left click
-and hold then drag to rotate the model.
+and hold then drag to rotate the model. Mouse wheel zooms in/out.
 
 ## License
 
@@ -79,7 +79,7 @@ This project's source code is released under the [MIT License](http://opensource
 
 ## Eye candy
 
-TODO add an image
+![O3D Viewer](https://raw.githubusercontent.com/glampert/reverse-engineering-darkstone/master/o3d-viewer.png "O3D Viewer samples")
 
 ---
 
