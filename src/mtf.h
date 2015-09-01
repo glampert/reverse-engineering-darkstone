@@ -3,7 +3,7 @@
  * -*- C -*-
  * File: mtf.h
  * Created on: 27/08/15
- * Brief: Functions to decompress DarkStone MTF game archives.
+ * Brief: Functions to decompress Darkstone MTF game archives.
  *
  * Source code licensed under the MIT license.
  * Copyright (C) 2015 Guilherme R. Lampert
@@ -22,7 +22,7 @@
 #include <stdio.h>
 
 /* ========================================================
- * DarkStone MTF game archive structures:
+ * Darkstone MTF game archive structures:
  * ======================================================== */
 
 typedef struct mtf_compressed_header {
@@ -56,7 +56,7 @@ enum {
  * ======================================================== */
 
 /*
- * Opens a DarkStone MTF archive for reading.
+ * Opens a Darkstone MTF archive for reading.
  * It is safe to call mtf_file_close() even if this function fails.
  */
 bool mtf_file_open(mtf_file_t * mtf, const char * filename);

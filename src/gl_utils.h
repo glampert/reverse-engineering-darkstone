@@ -103,7 +103,7 @@ void free_gl_vbo(gl_vbo_t * vbo);
 gl_texture_t load_gl_texture_from_file(const char * filename);
 void free_gl_texture(gl_texture_t * tex);
 
-// Set the window cursor to the custom sword cursor of DarkStone.
+// Set the window cursor to the custom sword cursor of Darkstone.
 // (which is loaded from "cursor24.png", assumed to be at the CWD!)
 void set_custom_cursor(void);
 void restore_default_cursor(void);

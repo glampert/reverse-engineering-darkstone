@@ -1,8 +1,8 @@
 
-# Reverse engineering DarkStone game file formats
+# Reverse engineering Darkstone game file formats
 
 This repository contains a couple tools and code to open MTF archives
-and view O3D models from the game [DarkStone: Evil Reigns](https://en.wikipedia.org/wiki/Darkstone).
+and view O3D models from the game [Darkstone: Evil Reigns](https://en.wikipedia.org/wiki/Darkstone).
 
 A partial description of the MTF format can be found [here](http://wiki.xentax.com/index.php?title=Darkstone).
 
@@ -30,9 +30,10 @@ Unix-like systems without changes or minimal changes.
 
 The only external dependency not included in the project is [**GLFW**](http://www.glfw.org/),
 which is used by the `o3d_viewer` to manage window and context creation in a portable way.
-If you only care about the MTF unpacker, then this dependency is no required, since you can
+If you only care about the MTF unpacker, then this dependency is not required, since you can
 compile it in isolation. The viewer requires GLFW to be properly installed and visible
-in the default include path.
+in the default include path. [GL3W](https://github.com/skaslev/gl3w) is used to load the OpenGL Library
+and [STB Image](https://github.com/nothings/stb) for image loading from file, but those are included in the project.
 
 ## Porting
 

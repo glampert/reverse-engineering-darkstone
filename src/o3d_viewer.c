@@ -3,7 +3,7 @@
  * -*- C -*-
  * File: o3d_viewer.c
  * Created on: 27/08/15
- * Brief: OpenGL + GLFW viewer for DarkStone O3D static meshes.
+ * Brief: OpenGL + GLFW viewer for Darkstone O3D static meshes.
  *
  * Source code licensed under the MIT license.
  * Copyright (C) 2015 Guilherme R. Lampert
@@ -102,7 +102,7 @@ static void refresh_window_title(void) {
 	if (viewer.o3d.vertexes != NULL) {
 		if (viewer.renderMode == RENDER_TEXTURED) {
 			set_window_title(
-				"DarkStone O3D Model Viewer -- %s -- %u verts, %u faces -- %s (%s)",
+				"Darkstone O3D Model Viewer -- %s -- %u verts, %u faces -- %s (%s)",
 				viewer.modelFileName,
 				viewer.o3d.vertexCount,
 				viewer.o3d.faceCount,
@@ -110,14 +110,14 @@ static void refresh_window_title(void) {
 				viewer.textureFileName);
 		} else {
 			set_window_title(
-				"DarkStone O3D Model Viewer -- %s -- %u verts, %u faces -- %s",
+				"Darkstone O3D Model Viewer -- %s -- %u verts, %u faces -- %s",
 				viewer.modelFileName,
 				viewer.o3d.vertexCount,
 				viewer.o3d.faceCount,
 				renderModeStrings[viewer.renderMode]);
 		}
 	} else {
-		set_window_title("DarkStone O3D Model Viewer");
+		set_window_title("Darkstone O3D Model Viewer");
 	}
 }
 
@@ -125,7 +125,7 @@ static void set_gl_vert(gl_draw_vertex_t * glVert, const o3d_vertex_t * o3dVert,
                         const o3d_color_t * o3dColor, const o3d_texcoord_t * o3dTexCoords,
                         float nx, float ny, float nz) {
 
-	// Scale to a more manageable size. DarkStone models used a big scale.
+	// Scale to a more manageable size. Darkstone models used a big scale.
 	glVert->px = o3dVert->x * viewer.modelScale;
 	glVert->py = o3dVert->y * viewer.modelScale;
 	glVert->pz = o3dVert->z * viewer.modelScale;
@@ -462,7 +462,7 @@ int main(int argc, const char * argv[]) {
 
 	viewer.app.windowWidth         = WINDOW_WIDTH;
 	viewer.app.windowHeight        = WINDOW_HEIGHT;
-	viewer.app.windowTitle         = "DarkStone O3D Model Viewer";
+	viewer.app.windowTitle         = "Darkstone O3D Model Viewer";
 	viewer.app.clearScrColor[0]    = 0.7f;
 	viewer.app.clearScrColor[1]    = 0.7f;
 	viewer.app.clearScrColor[2]    = 0.7f;

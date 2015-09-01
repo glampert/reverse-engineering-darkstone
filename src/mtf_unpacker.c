@@ -3,7 +3,7 @@
  * -*- C -*-
  * File: mtf_unpacker.c
  * Created on: 27/08/15
- * Brief: Very simple command-line tool to unpack a DarkStone MTF archive.
+ * Brief: Very simple command-line tool to unpack a Darkstone MTF archive.
  *
  * Source code licensed under the MIT license.
  * Copyright (C) 2015 Guilherme R. Lampert
@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	// Printing help is not treated and an error.
+	// Printing help is not treated as an error.
 	if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
 		print_usage(argv[0]);
 		return EXIT_SUCCESS;

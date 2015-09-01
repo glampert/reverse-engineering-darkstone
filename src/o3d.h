@@ -3,7 +3,7 @@
  * -*- C -*-
  * File: o3d.h
  * Created on: 27/08/15
- * Brief: Simple importer for DarkStone O3D models/meshes.
+ * Brief: Simple importer for Darkstone O3D models/meshes.
  *
  * Source code licensed under the MIT license.
  * Copyright (C) 2015 Guilherme R. Lampert
@@ -21,7 +21,7 @@
 #include <stdint.h>
 
 /* ========================================================
- * DarkStone O3D data structures:
+ * Darkstone O3D data structures:
  * ======================================================== */
 
 // Pragma pack is Visual Studio compatible and

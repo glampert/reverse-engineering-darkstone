@@ -3,7 +3,7 @@
  * -*- C -*-
  * File: o3d.c
  * Created on: 27/08/15
- * Brief: Simple importer for DarkStone O3D models/meshes.
+ * Brief: Simple importer for Darkstone O3D models/meshes.
  *
  * Source code licensed under the MIT license.
  * Copyright (C) 2015 Guilherme R. Lampert

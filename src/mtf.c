@@ -3,7 +3,7 @@
  * -*- C -*-
  * File: mtf.c
  * Created on: 27/08/15
- * Brief: Functions to decompress DarkStone MTF game archives.
+ * Brief: Functions to decompress Darkstone MTF game archives.
  *
  * Source code licensed under the MIT license.
  * Copyright (C) 2015 Guilherme R. Lampert
@@ -56,7 +56,7 @@ static inline bool mtf_is_ascii(int ch) {
 static void mtf_fix_filepath(char * pathInOut) {
 	assert(pathInOut != NULL);
 	//
-	// DarkStone used Windows-style paths, with
+	// Darkstone used Windows-style paths, with
 	// backslashes as directory separator.
 	//
 	// Also, there are a couple filenames in some
@@ -204,12 +204,18 @@ static bool mtf_decompress_write_file(FILE * fileIn, FILE * fileOut, uint32_t de
 	}
 
 	bool hadError = false;
-	int bytesRead = sizeof(mtf_compressed_header_t);
 	int bytesLeft = decompressedSize;
 
 	// Do one byte at a time. Repeat until we have processed
 	// the advertised decompressed size in bytes.
-	while (bytesLeft) {
+	//
+	// Parts of this decompressor where based on this implementation:
+	//   http://pastebin.com/DycDYxPe
+	//
+	// More information about it here:
+	//   https://zeckul.wordpress.com/2012/03/04/darkstones-mtf-file-format-part-2/
+	//
+	while (bytesLeft > 0) {
 
 		// Each compressed block/chunk is prefixed by a one byte header.
 		// Each bit in this chunk tells us how to handle the next byte
@@ -219,7 +225,6 @@ static bool mtf_decompress_write_file(FILE * fileIn, FILE * fileOut, uint32_t de
 			hadError = true;
 			goto BAIL;
 		}
-		++bytesRead;
 
 		// For each bit in the chunk header, staring from
 		// the lower/right-hand bit (little endian)
@@ -235,7 +240,6 @@ static bool mtf_decompress_write_file(FILE * fileIn, FILE * fileOut, uint32_t de
 				}
 
 				*decompressedPtr++ = byte;
-				++bytesRead;
 				--bytesLeft;
 			} else {
 
@@ -247,8 +251,6 @@ static bool mtf_decompress_write_file(FILE * fileIn, FILE * fileOut, uint32_t de
 					hadError = true;
 					goto BAIL;
 				}
-
-				bytesRead += 2;
 
 				if (word == 0) {
 					// Looks like a few entries have padding or something.

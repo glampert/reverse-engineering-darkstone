@@ -1,0 +1,146 @@
+
+------------------------------
+Darkstone MTF archive format
+------------------------------
+
+The MTF file format is an archive format used by the Darkstone game
+to store most of game asserts. There are three known MTF files in the
+original release of the game:
+
+- MUSIC.MTF
+- VOICES1.MTF
+- DATA.MTF
+
+MUSIC.MTF stores the game's background musics/soundtracks.
+Extracting it will output the 25 soundtracks of the game as MP2 sound files.
+
+VOICES1.MTF stores all the recorded in-game dialogs in MP2 format.
+
+DATA.MTF is where the bulk of the game assets are stored.
+It contains all the textures, 3D models, sound effects, scripts and more.
+
+The Dragon Unpacker tool (http://sourceforge.net/projects/dragonunpacker/)
+supposedly can open this format, but I haven't verified that.
+
+Refer to mtf.h and mtf.c for the finer implementation details.
+
+---------------------------
+File structure
+---------------------------
+
+Type: BINARY.
+Byte-order: LITTLE ENDIAN.
+
+First 4 bytes of the file are a 32bits word containing the number of file
+entries in the archive. Apparently, entries with empty directories are not
+stored.
+
+A list with information about each entry follows immediately.
+Each entry structure consists of:
+
+- 1 32bits word with the length in characters of the file/path name.
+  This length supposedly includes the null terminator, which is also stored in the file.
+
+- The filename string follows immediately with length equal to the previously read word.
+  It should include a null at the end, but it is safer to manually null terminate to be sure.
+  This name includes the full path, always ending in a filename (no empty directories).
+  Path separator used is the backslash ('\\'), Windows style. No drive letters.
+
+- After the variable length filename is read, two more 32bits words will follow with:
+  1: the absolute file offset in the archive where the entry's data starts.
+  2: the uncompressed size in byte of the file entry data.
+
+After the list of file entry metadata, the actual contents of the first entry follow.
+Entries are tightly packed and each follows where the previous ended. Apparently, no
+effort to align the data to a word boundary was made.
+
+---------------------------
+File entries
+---------------------------
+
+The data contents of each file entry will be either uncompressed or compressed.
+
+If uncompressed, you can read it directly using the decompressed size from the entry header.
+
+If it is compressed, then the actual entry data will be prefixed by a 12 bytes compression header.
+The only way to tell of an entry is compressed or not is by peeking this 12 bytes and inferring
+from it if compressed. If the entry is not compressed, then seek back 12 bytes and read the
+whole uncompressed block.
+
+The compression header consists of:
+
+- Two bytes with "magic numbers" indicating if the following data is compressed.
+  If the data is compressed, then the two bytes will be, respectively:
+  1: 0xAE (174) or 0xAF (175)
+  2: Always 0xBE (190)
+  Any other value indicates an entry stored uncompressed, so discard the header and rewind.
+
+- After the two bytes of magic, there's one 16bits word of unknown contents.
+  Possibly additional decompression flags, but we can decompress without it.
+
+- 1 32bits word with the advertised compressed size in bytes of the data, including the size
+  of the compression header (+12 bytes).
+
+- 1 32bits word with the decompressed size of the data, which should match the value
+  in the previously read common file entry header.
+
+Most file entries are compressed, excerpt for the MP2 musics
+and dialogs, which are (apparently) never compressed.
+
+---------------------------
+MTF compression
+---------------------------
+
+The Darkstone MTF uses a custom compression somewhat similar to RLE, but instead
+of replicating a single byte N times, it attempts to consolidate identical blocks
+of variable size into a single instance, then reference it several times.
+
+For a compressed entry, the first byte of compressed data follows immediately
+after the 12 bytes compression header. Each chunk of compressed data is prefixed
+by one byte, where each bit will indicate how the next 8 bytes read are handled.
+
+Stating from the lower right-hand bit (little endian), check if the bit is set.
+If the bit is set, read one more byte from the file and store it unchanged in
+the decompression buffer.
+
+If the bit is zero, then read a 16bits control word from the file.
+The top 6 bits of this word will containing a byte count.
+The lower 10 bits will hold an offset in the decompression buffer.
+
+According to the explanation provided here: http://wiki.xentax.com/index.php?title=Darkstone
+You need to add the constant 3 to the count. Then copy that many bytes to the end of the
+decompression buffer minus the offset.
+
+Note that the link above provides a pretty clear explanation, but the order of bits
+in the control word appears to be backwards. That is either and error or the author
+was assuming the machine processing the data is big endian.
+
+This should be clearer if you look into mtf.c, function mtf_decompress_write_file().
+
+---------------------------
+Simple diagram of an MTF
+---------------------------
+
+(number to the right is the size in bytes)
++---------------------+
+| fileEntryCount  | 4 |
+|-----------------+---|
+| fileEntryHeader | N |
+| ...             |   |
+| ...             |   |
+| ...             |   |
+|-----------------+---|
+| file data (possible |
+| compressed header)  |
+| ...                 |
++---------------------+
+EOF
+
+Notes:
+
+- The size of a fileEntryHeader will vary
+ according to the length in characters of the filename.
+
+- Size of a compressed header is always 12 bytes, but it
+  will be absent for an uncompressed entry.
+

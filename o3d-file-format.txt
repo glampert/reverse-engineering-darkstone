@@ -1,0 +1,86 @@
+
+---------------------------
+Darkstone O3D file format
+---------------------------
+
+The O3D (probably stands for Object 3D) is the format used for the static geometries
+or the Darkstone game. This includes weapons, buildings, props and level geometry.
+
+This format seems to be specific to the game, not related to an old Objective3D Game Engine
+neither a game called Flyff that apparently uses a file format with the same filename extension.
+
+The 3D Object Converter tool (3doc.i3dconverter.com) can open and display O3D models.
+
+Refer to o3d.h and o3d.c for the finer implementation details.
+Overall, the format is very straightforward, similar to a lot
+of other 3D model formats used by games in the late 90's.
+
+---------------------------
+File structure
+---------------------------
+
+Type: BINARY.
+Byte-order: LITTLE ENDIAN.
+
+The first two 32bits words of the file consists of the number of vertexes
+followed by the number of faces. Two more 32bits words of unknown contents
+follow after that.
+
+Past this tiny 4 words header there's the list of model vertexes. Each vertex
+(or position if you will) is comprised of four (4) 32bits floating point values
+for the X, Y and Z values.
+
+The list of faces immediately follow the vertex list. Each model face consists of:
+
+- 4 bytes of what is assumed to be the face color in BGRA order (one byte per channel).
+  However, the colors don't always seem to match the expected values.
+  For some models, like weapons, the colors apparently match the expected,
+  but for other models, they hold awkward values. There is a possibility
+  that the color is also reused as some sort of face/surface flag and
+  is not used for rendering in such cases. If you're only rendering textured,
+  then you probably don't care about the face color anyway.
+
+- 4 sets of texture coordinates. Each texture coordinate being a pair of 32bits floats for U and V (or S and T).
+  There are four sets because a face may be a quadrilateral or a triangle, but the size
+  of the structure is fixed for both. The last pair of floats is zero padding if the face
+  is a triangle. Texture coordinates are scaled by the size of the texture map,
+  which seems to be always 256 (even though there are smaller textures in the game).
+
+- 4 16bits integers representing indexes in the previously read vertex array for
+  each vertex position that makes this face (zero based). Again four are provided even
+  if the face is a triangle. If it is a triangle, the last index will be set to UINT16_MAX / 0xFFFF.
+  The easiest way to test if the face is a triangle is to just check face.index[3] against that value.
+
+- 1 32bits word of unknown contents (or it might be a pair or int16s).
+  Common value for it is 37 (0x25). This is probably an additional set of face/surface flags.
+
+- 1 16bits word with the Texture/Material index. This is the only thing identifying the
+  texture applied to a face. Each texture image in the texture registry starts with
+  either "Kxyzw_" or "Rxyzw_" then some name following the underscore. The 'xyzw' part
+  will be this number. So for instance, texture for the Knight model will be
+  "K0015_KNIGHT.TGA" or "R0015_KNIGHT.TGA". Only way to select the texture in an automated
+  fashion is to build a list of filenames and then search for one containing the texture number.
+
+---------------------------
+Simple diagram of an O3D
+---------------------------
+
+(number to the right is the size in bytes)
++------------------+
+| vertexCount | 4  |
+| faceCount   | 4  |
+| unknown     | 4  |
+| unknown     | 4  |
+|-------------+----|
+| vertex-XYZ  | 12 |
+| ...         | .. |
+| ...         | .. |
+| ...         | .. |
+|-------------+----|
+| face        | 50 |
+| ...         | .. |
+| ...         | .. |
+| ...         | .. |
++------------------+
+EOF
+
