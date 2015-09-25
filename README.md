@@ -6,9 +6,9 @@ and view O3D models from the game [Darkstone: Evil Reigns](https://en.wikipedia.
 
 A partial description of the MTF format can be found [here](http://wiki.xentax.com/index.php?title=Darkstone).
 
-Currently there's full support for decompressing MTF game archives into
+Currently there's full support for decompressing MTF archives into
 normal files in the file system. No support for rebuilding the archives
-is implemented, but it shouldn't be very had to do the inverse process
+is implemented, but it shouldn't be very hard to do the inverse process
 and pack files back into an MTF...
 
 There are two tools in the project:
@@ -21,7 +21,7 @@ Once you unpack the MTF archives, you can use this viewer to render the static m
 ## Directory structure / dependencies
 
 The `src/` directory contains the source code for the tools and necessary dependencies,
-including third-party code. Files of interest are: `mtf.h/.c` and `o3d.h/.c`.
+including third-party code. Files of interest are `mtf.h/.c` and `o3d.h/.c`.
 
 The `shaders/` directory contains the GLSL shaders used by `o3d_viewer`.
 
@@ -32,8 +32,8 @@ The only external dependency not included in the project is [**GLFW**](http://ww
 which is used by the `o3d_viewer` to manage window and context creation in a portable way.
 If you only care about the MTF unpacker, then this dependency is not required, since you can
 compile it in isolation. The viewer requires GLFW to be properly installed and visible
-in the default include path. [GL3W](https://github.com/skaslev/gl3w) is used to load the OpenGL Library
-and [STB Image](https://github.com/nothings/stb) for image loading from file, but those are included in the project.
+in the default include path. [**GL3W**](https://github.com/skaslev/gl3w) is used to load the OpenGL Library
+and [**STB Image**](https://github.com/nothings/stb) for image loading from file, but those are included in the project.
 
 ## Porting
 
@@ -89,6 +89,8 @@ of legally purchased copies of the game and information made public on the Inter
 ![O3D Viewer](https://raw.githubusercontent.com/glampert/reverse-engineering-darkstone/master/o3d-viewer.png "O3D Viewer samples")
 
 ---
+
+I wrote a [post with more details about this in my blog](http://glampert.com/2015/09-01/reverse-engineering-darkstone/).
 
 Have fun!
 
