@@ -78,6 +78,12 @@ and hold then drag to rotate the model. Mouse wheel zooms in/out.
 
 This project's source code is released under the [MIT License](http://opensource.org/licenses/MIT).
 
+**Disclaimer:**
+
+The goal of this project is to experiment, research, and educate on the topics of game
+development and game resource management. All information was obtained via reverse engineering
+of legally purchased copies of the game and information made public on the Internet.
+
 ## Eye candy
 
 ![O3D Viewer](https://raw.githubusercontent.com/glampert/reverse-engineering-darkstone/master/o3d-viewer.png "O3D Viewer samples")
